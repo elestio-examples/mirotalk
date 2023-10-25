@@ -7,7 +7,7 @@ services:
     hostname: mirotalkwebrtc
     volumes:
       - .env:/src/.env:ro
-      - ./frontend/js/config.js:/src/frontend/js/config.js:ro
+      - ./config.js:/src/backend.js/config.js:ro
       # - ./backend/:/src/backend/:ro
       # - ./frontend/:/src/frontend/:ro
     ports:
