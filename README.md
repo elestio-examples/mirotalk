@@ -13,5 +13,6 @@ Deploy MiroTalk server with CI/CD on Elestio
 You can open MiroTalk UI here:
 
     URL: https://[CI_CD_DOMAIN]
+    email: [ADMIN_EMAIL]
     login: admin
     password: [ADMIN_PASSWORD]

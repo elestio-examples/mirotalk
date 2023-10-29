@@ -69,5 +69,6 @@ lifeCycleConfig:
 webUI:
   - url: "https://[CI_CD_DOMAIN]"
     label: "MiroTalk UI"
+    email: "[ADMIN_EMAIL]"
     login: "admin"
     password: "[ADMIN_PASSWORD]"
