@@ -2,7 +2,7 @@ version: "3"
 
 services:
   mirotalkwebrtc:
-    image: mirotalk/webrtc:${SOFTWARE_VERSION_TAG}
+    image: elestio4test/mirotalk:${SOFTWARE_VERSION_TAG}
     restart: always
     hostname: mirotalkwebrtc
     volumes:
