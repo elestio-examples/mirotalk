@@ -6,8 +6,8 @@ services:
     restart: always
     hostname: mirotalkwebrtc
     volumes:
-      - .env:/src/.env:ro
-      - ./config.js:/src/backend.js/config.js:ro
+      - ${folderName}/.env:/src/.env:ro
+      - ${folderName}/config.js:/src/backend.js/config.js:ro
       # - ./backend/:/src/backend/:ro
       # - ./frontend/:/src/frontend/:ro
     ports:
@@ -25,5 +25,5 @@ services:
     ports:
       - "172.17.0.1:${MONGO_PORT}:${MONGO_PORT}"
     volumes:
-      - "./.mongodb_data:/data/db"
+      - "${folderName}/.mongodb_data:/data/db"
     command: mongod --quiet --logpath /dev/null
