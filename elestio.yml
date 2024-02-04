@@ -29,7 +29,7 @@ environments:
   - key: "ADMIN_EMAIL"
     value: "[EMAIL]"
   - key: "ADMIN_PASSWORD"
-    value: "@random_password@"
+    value: "@1Aarandom_password@"
   - key: "SERVER_HOST"
     value: "[CI_CD_DOMAIN]"
   - key: "SERVER_PORT"
