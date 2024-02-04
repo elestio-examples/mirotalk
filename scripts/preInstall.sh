@@ -36,7 +36,7 @@ rm post.txt
 
 
 sed -i -e "s~IP_TO_CHANGE~${IP}~g" ./configs/sfu.js
-sed -i -e "s~HOST_TO_CHANGE~${SERVER_HOST}~g" ./configs/sfu.js
+sed -i -e "s~HOST_TO_CHANGE~${SERVER_HOST}~g" ./configs/config.js
 
 cat << EOT >> ./bro.env
 # Server
