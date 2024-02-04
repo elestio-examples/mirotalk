@@ -7,7 +7,7 @@ services:
     hostname: mirotalkwebrtc
     volumes:
       - .env:/src/.env:ro
-      - ./config.js:/src/backend.js/config.js:ro
+      - ./configs/config.js:/src/backend/config.js:ro
       # - ./backend/:/src/backend/:ro
       # - ./frontend/:/src/frontend/:ro
     ports:
@@ -27,3 +27,38 @@ services:
     volumes:
       - "./.mongodb_data:/data/db"
     command: mongod --quiet --logpath /dev/null
+
+  mirotalksfu:
+    image: mirotalk/sfu:latest
+    restart: always
+    volumes:
+      - ./configs/sfu.js:/src/app/src/config.js:ro
+      # These volumes are not mandatory, comment if you want to use it
+      # - ./app/:/src/app/:ro
+      # - ./public/:/src/public/:ro
+    ports:
+      - "172.17.0.1:3010:3010/tcp"
+      - "40000-40100:40000-40100/tcp"
+      - "40000-40100:40000-40100/udp"
+
+  mirotalkc2c:
+    image: mirotalk/c2c:latest
+    volumes:
+      - ./c2c.env:/src/.env:ro
+      # These volumes are not mandatory, uncomment if you want to use it
+      # - ./frontend/:/src/frontend/:ro
+      # - ./backend/:/src/backend/:ro
+    restart: always
+    ports:
+      - "172.17.0.1:36703:8080"
+
+  mirotalkbro:
+    image: mirotalk/bro:latest
+    volumes:
+      - ./bro.env:/src/.env:ro
+      # These volumes are not mandatory, uncomment if you want to use it
+      # - ./app/:/src/app/:ro
+      # - ./public/:/src/public/:ro
+    restart: always
+    ports:
+      - "172.17.0.1:21208:3016"

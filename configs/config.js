@@ -22,9 +22,9 @@ module.exports = {
     },
     SFU: {
       Visible: true,
-      Home: "https://sfu.mirotalk.com",
-      Room: "https://sfu.mirotalk.com/newroom",
-      Join: "https://sfu.mirotalk.com/join/",
+      Home: "https://HOST_TO_CHANGE:5436",
+      Room: "https://HOST_TO_CHANGE:5436/newroom",
+      Join: "https://HOST_TO_CHANGE:5436/join/",
       GitHub: {
         Visible: true,
         Repo: "https://github.com/miroslavpejic85/mirotalksfu",
@@ -35,8 +35,8 @@ module.exports = {
     },
     C2C: {
       Visible: true,
-      Home: "https://c2c.mirotalk.com",
-      Room: "https://c2c.mirotalk.com/?room=",
+      Home: "https://HOST_TO_CHANGE:22807",
+      Room: "https://HOST_TO_CHANGE:22807/?room=",
       GitHub: {
         Visible: true,
         Repo: "https://github.com/miroslavpejic85/mirotalkc2c",
@@ -47,9 +47,9 @@ module.exports = {
     },
     BRO: {
       Visible: true,
-      Home: "https://bro.mirotalk.com",
-      Broadcast: "https://bro.mirotalk.com/broadcast?id=",
-      Viewer: "https://bro.mirotalk.com/viewer?id=",
+      Home: "https://HOST_TO_CHANGE:27664",
+      Broadcast: "https://HOST_TO_CHANGE:27664/broadcast?id=",
+      Viewer: "https://HOST_TO_CHANGE:27664/viewer?id=",
       GitHub: {
         Visible: true,
         Repo: "https://github.com/miroslavpejic85/mirotalkbro",

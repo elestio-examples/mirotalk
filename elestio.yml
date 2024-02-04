@@ -7,6 +7,22 @@ ports:
     public: true
     path: "/"
     isAuth: false
+  - protocol: "HTTPS"
+    targetProtocol: "HTTP"
+    listeningPort: "5436"
+    targetPort: "3010"
+    targetIP: "172.17.0.1"
+    public: true
+    path: "/"
+    isAuth: false
+  - protocol: "HTTPS"
+    targetProtocol: "HTTP"
+    listeningPort: "22807"
+    targetPort: "36703"
+    targetIP: "172.17.0.1"
+    public: true
+    path: "/"
+    isAuth: false
 environments:
   - key: "SOFTWARE_VERSION_TAG"
     value: "latest"
@@ -46,6 +62,8 @@ environments:
     value: "false"
   - key: "TWILIO_SMS"
     value: "false"
+  - key: "IP"
+    value: "[IP]"
 
 config:
   runTime: "dockerCompose"
