@@ -9,9 +9,9 @@ module.exports = {
   MiroTalk: {
     P2P: {
       Visible: true,
-      Home: "https://p2p.mirotalk.com",
-      Room: "https://p2p.mirotalk.com/newcall",
-      Join: "https://p2p.mirotalk.com/join/",
+      Home: "https://HOST_TO_CHANGE:48540",
+      Room: "https://HOST_TO_CHANGE:48540/newcall",
+      Join: "https://HOST_TO_CHANGE:48540/join/",
       GitHub: {
         Visible: true,
         Repo: "https://github.com/miroslavpejic85/mirotalk",

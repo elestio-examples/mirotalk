@@ -62,3 +62,14 @@ services:
     restart: always
     ports:
       - "172.17.0.1:21208:3016"
+
+  mirotalkp2p:
+    image: mirotalk/p2p:latest
+    volumes:
+      - ./p2p.env:/src/.env:ro
+      # These volumes are not mandatory, uncomment if you want to use it
+      # - ./app/:/src/app/:ro
+      # - ./public/:/src/public/:ro
+    restart: always
+    ports:
+      - "172.17.0.1:43850:3000"
