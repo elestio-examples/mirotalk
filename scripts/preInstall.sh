@@ -131,7 +131,7 @@ REDIRECT_URL= #https://c2c.mirotalk.com
 EOT
 
 
-cat << EOT >> ./c2c.env
+cat << EOT >> ./p2p.env
 # Enable self-signed certs (app/ssl)
 
 HTTPS=false # true or false
