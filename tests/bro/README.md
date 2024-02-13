@@ -30,16 +30,21 @@ You can deploy it easily with the following command:
 
     git clone https://github.com/elestio-examples/mirotalk.git
 
-Copy the .env file from tests folder to the project directory
+Copy the .env files from tests folder to the project directory
 
-    cp ./tests/.env ./.env
+    cp ./tests/webrtc/.env ./.env
+    cp ./tests/webrtc/bro.env ./bro.env
+    cp ./tests/webrtc/c2c.env ./c2c.env
+    cp ./tests/webrtc/p2p.env ./p2p.env
 
-Edit the .env file with your own values.
+Edit the .env files with your own values.
 
-Create data folders with correct permissions
+Copy the config.js and sfu.js files from tests folder to the project directory
 
-    mkdir -p ./pgdata
-    chown -R 1000:1000 ./pgdata
+    cp ./tests/webrtc/config.js ./config.js
+    cp ./tests/webrtc/sfu.js ./sfu.js
+
+Edit them with your own values.
 
 Run the project with the following command
 
@@ -56,18 +61,18 @@ Here are some example snippets to help you get started creating a container.
 
         services:
         mirotalkwebrtc:
-            image: mirotalk/webrtc:latest
+            image: elestio/mirotalk:${SOFTWARE_VERSION_TAG}
             restart: always
             hostname: mirotalkwebrtc
             volumes:
-            - .env:/src/.env:ro
-            - ./config.js:/src/backend.js/config.js:ro
-            # - ./backend/:/src/backend/:ro
-            # - ./frontend/:/src/frontend/:ro
+                - .env:/src/.env:ro
+                - ./configs/config.js:/src/backend/config.js:ro
+                # - ./backend/:/src/backend/:ro
+                # - ./frontend/:/src/frontend/:ro
             ports:
-            - "172.17.0.1:26645:${SERVER_PORT}"
+                - "172.17.0.1:26645:${SERVER_PORT}"
             links:
-            - mongodb
+                - mongodb
 
         mongodb:
             image: mongo:latest
@@ -77,34 +82,84 @@ Here are some example snippets to help you get started creating a container.
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
             MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
             ports:
-            - "172.17.0.1:${MONGO_PORT}:${MONGO_PORT}"
+                - "172.17.0.1:${MONGO_PORT}:${MONGO_PORT}"
             volumes:
-            - "./.mongodb_data:/data/db"
+                - "./.mongodb_data:/data/db"
             command: mongod --quiet --logpath /dev/null
 
+        mirotalksfu:
+            image: mirotalk/sfu:latest
+            restart: always
+            volumes:
+                - ./configs/sfu.js:/src/app/src/config.js:ro
+                # These volumes are not mandatory, comment if you want to use it
+                # - ./app/:/src/app/:ro
+                # - ./public/:/src/public/:ro
+            ports:
+                - "172.17.0.1:3010:3010/tcp"
+                - "40000-40100:40000-40100/tcp"
+                - "40000-40100:40000-40100/udp"
+
+        mirotalkc2c:
+            image: mirotalk/c2c:latest
+            volumes:
+                - ./c2c.env:/src/.env:ro
+                # These volumes are not mandatory, uncomment if you want to use it
+                # - ./frontend/:/src/frontend/:ro
+                # - ./backend/:/src/backend/:ro
+            restart: always
+            ports:
+                - "172.17.0.1:36703:8080"
+
+        mirotalkbro:
+            image: mirotalk/bro:latest
+            volumes:
+                - ./bro.env:/src/.env:ro
+                # These volumes are not mandatory, uncomment if you want to use it
+                # - ./app/:/src/app/:ro
+                # - ./public/:/src/public/:ro
+            restart: always
+            ports:
+                - "172.17.0.1:21208:3016"
+
+        mirotalkp2p:
+            image: mirotalk/p2p:latest
+            volumes:
+                - ./p2p.env:/src/.env:ro
+                # These volumes are not mandatory, uncomment if you want to use it
+                # - ./app/:/src/app/:ro
+                # - ./public/:/src/public/:ro
+            restart: always
+            ports:
+                - "172.17.0.1:43850:3000"
 
 ### Environment variables
 
-|           Variable            |                Value (example)                             |
-| :---------------------------: | :--------------------------------------------------------: |
-|        SERVER_HOST            |               your_domain                                  |
-|        ADMIN_EMAIL            |               your@email.com                               |
-|        ADMIN_PASSWORD         |               your-password                                |
-|        SERVER_PORT            |               9000                                         |
-|        SERVER_URL             |               https://your_domain                          |
-|        JWT_KEY                |               your_key                                     |
-|        JWT_EXP                |               2h                                           |
-|        MONGO_HOST             |               mongodb                                      |
-|        MONGO_USERNAME         |               root                                         |
-|        MONGO_PASSWORD         |               your-password                                |
-|        MONGO_DATABASE         |               mirotalk                                     |
-|        MONGO_PORT             |               27017                                        |
-|        MONGO_URL              |               mongodb://root:[your_password]@mongodb:27017 |
-|        EMAIL_VERIFICATION     |               true                                         |
-|        ADMIN_USERNAME         |               USERNAME                                     |
-|        NGROK_ENABLED          |               false                                        |
-|        TWILIO_SMS             |               false                                        |
-|        USER_REGISTRATION_MODE |               true                                         |
+|        Variable        |               Value (example)                |
+| :--------------------: | :------------------------------------------: |
+|      SERVER_HOST       |                 your_domain                  |
+|      ADMIN_EMAIL       |                your@email.com                |
+|     ADMIN_PASSWORD     |                your-password                 |
+|      SERVER_PORT       |                     9000                     |
+|       SERVER_URL       |             https://your_domain              |
+|        JWT_KEY         |                   your_key                   |
+|        JWT_EXP         |                      2h                      |
+|       MONGO_HOST       |                   mongodb                    |
+|     MONGO_USERNAME     |                     root                     |
+|     MONGO_PASSWORD     |                your-password                 |
+|     MONGO_DATABASE     |                   mirotalk                   |
+|       MONGO_PORT       |                    27017                     |
+|       MONGO_URL        | mongodb://root:[your_password]@mongodb:27017 |
+|   EMAIL_VERIFICATION   |                     true                     |
+|     ADMIN_USERNAME     |                   USERNAME                   |
+|     NGROK_ENABLED      |                    false                     |
+|       TWILIO_SMS       |                    false                     |
+| USER_REGISTRATION_MODE |                     true                     |
+|           IP           |                51.15.194.244                 |
+|       EMAIL_HOST       |               your.email.host                |
+|       EMAIL_PORT       |               your.email.port                |
+|     EMAIL_USERNAME     |                your@email.com                |
+|     EMAIL_PASSWORD     |             your-email-password              |
 
 # Maintenance
 

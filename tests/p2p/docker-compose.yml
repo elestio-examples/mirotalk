@@ -1,0 +1,75 @@
+version: "3"
+
+services:
+  mirotalkwebrtc:
+    image: mirotalk/webrtc:latest
+    restart: always
+    hostname: mirotalkwebrtc
+    volumes:
+      - ${folderName}/.env:/src/.env:ro
+      - ${folderName}/config.js:/src/backend/config.js:ro
+      # - ./backend/:/src/backend/:ro
+      # - ./frontend/:/src/frontend/:ro
+    ports:
+      - "172.17.0.1:26645:${SERVER_PORT}"
+    links:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+    ports:
+      - "172.17.0.1:${MONGO_PORT}:${MONGO_PORT}"
+    volumes:
+      - "${folderName}/.mongodb_data:/data/db"
+    command: mongod --quiet --logpath /dev/null
+
+  mirotalksfu:
+    image: mirotalk/sfu:latest
+    restart: always
+    volumes:
+      - ${folderName}/sfu.js:/src/app/src/config.js:ro
+      # These volumes are not mandatory, comment if you want to use it
+      # - ./app/:/src/app/:ro
+      # - ./public/:/src/public/:ro
+    ports:
+      - "172.17.0.1:3010:3010/tcp"
+      - "40000-40100:40000-40100/tcp"
+      - "40000-40100:40000-40100/udp"
+
+  mirotalkc2c:
+    image: mirotalk/c2c:latest
+    volumes:
+      - ${folderName}/c2c.env:/src/.env:ro
+      # These volumes are not mandatory, uncomment if you want to use it
+      # - ./frontend/:/src/frontend/:ro
+      # - ./backend/:/src/backend/:ro
+    restart: always
+    ports:
+      - "172.17.0.1:36703:8080"
+
+  mirotalkbro:
+    image: mirotalk/bro:latest
+    volumes:
+      - ${folderName}/bro.env:/src/.env:ro
+      # These volumes are not mandatory, uncomment if you want to use it
+      # - ./app/:/src/app/:ro
+      # - ./public/:/src/public/:ro
+    restart: always
+    ports:
+      - "172.17.0.1:21208:3016"
+
+  mirotalkp2p:
+    image: elestio4test/mirotalk-p2p:latest
+    volumes:
+      - ${folderName}/p2p.env:/src/.env:ro
+      # These volumes are not mandatory, uncomment if you want to use it
+      # - ./app/:/src/app/:ro
+      # - ./public/:/src/public/:ro
+    restart: always
+    ports:
+      - "172.17.0.1:43850:3000"
