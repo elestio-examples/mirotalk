@@ -236,10 +236,11 @@ module.exports = {
     },
     // WebRtcTransport settings
     webRtcTransport: {
-      listenIps: [
+      listenInfos: [
         {
+          protocol: "udp",
           ip: "0.0.0.0",
-          announcedIp: "IP_TO_CHANGE", // replace by 'public static IPV4 address' https://api.ipify.org (type string --> 'xx.xxx.xxx.xx' not xx.xxx.xxx.xx)
+          announcedAddress: "IP_TO_CHANGE", // replace by 'public static IPV4 address' https://api.ipify.org (type string --> 'xx.xxx.xxx.xx' not xx.xxx.xxx.xx)
         }, //announcedIp: '' will be auto-detected on server start, for docker localPC set '127.0.0.1'
       ],
       initialAvailableOutgoingBitrate: 1000000,
