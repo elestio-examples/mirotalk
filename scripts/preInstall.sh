@@ -33,6 +33,8 @@ EOT
 
 rm post.txt
 
+COTURN_PASSWORD=${COTURN_PASSWORD:-`openssl rand -hex 8`}
+
 
 
 sed -i -e "s~IP_TO_CHANGE~${IP}~g" ./configs/sfu.js
@@ -57,12 +59,12 @@ DEBUG=true # true or false
 # Check: https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/
 
 STUN_SERVER_ENABLED=true # true or false
-STUN_SERVER_URL=stun:stun.l.google.com:19302
+STUN_SERVER_URL=stun:${SERVER_HOST}:3478
 
 TURN_SERVER_ENABLED=true # true or false
-TURN_SERVER_URL=turn:a.relay.metered.ca:443
-TURN_SERVER_USERNAME=e8dd65b92c62d3e36cafb807
-TURN_SERVER_CREDENTIAL=uWdWNmkhvyqTEswO
+TURN_SERVER_URL=turn:${SERVER_HOST}:3478
+TURN_SERVER_USERNAME=miro_user
+TURN_SERVER_CREDENTIAL=${COTURN_PASSWORD}
 
 # API
 # The response will give you a entrypoint / URL for the direct join to the meeting.
@@ -101,12 +103,12 @@ PORT=8080
 # Check: https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/
 
 STUN_SERVER_ENABLED=true # true or false
-STUN_SERVER_URL=stun:stun.l.google.com:19302
+STUN_SERVER_URL=stun:${SERVER_HOST}:3478
 
 TURN_SERVER_ENABLED=true # true or false
-TURN_SERVER_URL=turn:a.relay.metered.ca:443
-TURN_SERVER_USERNAME=e8dd65b92c62d3e36cafb807
-TURN_SERVER_CREDENTIAL=uWdWNmkhvyqTEswO
+TURN_SERVER_URL=turn:${SERVER_HOST}:3478
+TURN_SERVER_USERNAME=miro_user
+TURN_SERVER_CREDENTIAL=${COTURN_PASSWORD}
 
 # API
 # The response will give you a entrypoint / Room URL for your meeting.
@@ -181,7 +183,7 @@ NGROK_AUTH_TOKEN=YourNgrokAuthToken
 # Check: https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/
 
 STUN_SERVER_ENABLED=true # true or false
-STUN_SERVER_URL=stun:stun.l.google.com:19302
+STUN_SERVER_URL=stun:${SERVER_HOST}:3478
 
 # Turn 
 # About: https://bloggeek.me/webrtcglossary/turn/
@@ -191,9 +193,9 @@ STUN_SERVER_URL=stun:stun.l.google.com:19302
 # Check: https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/
 
 TURN_SERVER_ENABLED=true # true or false
-TURN_SERVER_URL=turn:a.relay.metered.ca:443
-TURN_SERVER_USERNAME=e8dd65b92c62d3e36cafb807
-TURN_SERVER_CREDENTIAL=uWdWNmkhvyqTEswO
+TURN_SERVER_URL=turn:${SERVER_HOST}:3478
+TURN_SERVER_USERNAME=miro_user
+TURN_SERVER_CREDENTIAL=${COTURN_PASSWORD}
 
 # IP lookup
 # Using GeoJS to get more info about peer by IP
@@ -257,5 +259,29 @@ CHATGPT_TEMPERATURE=0
 STATS_ENABLED=true # true or false
 STATS_SCR=https://stats.mirotalk.com/script.js
 STATS_ID=c7615aa7-ceec-464a-baba-54cb605d7261
+
+EOT
+
+
+cat << EOT >> ./turnserver.conf
+listening-port=3478
+# tls-listening-port=5349
+
+min-port=10000
+max-port=20000
+
+fingerprint
+lt-cred-mech
+
+user=miro_user:${COTURN_PASSWORD}
+
+server-name=${SERVER_HOST}
+realm=${SERVER_HOST}
+
+total-quota=100
+stale-nonce=600
+
+
+no-stdout-log
 
 EOT
